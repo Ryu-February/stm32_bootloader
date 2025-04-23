@@ -10,6 +10,7 @@
 #include "cdc.h"
 #include "queue.h"
 
+#ifdef _USE_HW_UART
 
 static bool is_open[UART_MAX_CH];
 
@@ -197,6 +198,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 
 
 
+
 void HAL_UART_MspInit(UART_HandleTypeDef* uartHandle)
 {
 
@@ -277,4 +279,4 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* uartHandle)
   /* USER CODE END USART1_MspDeInit 1 */
   }
 }
-
+#endif

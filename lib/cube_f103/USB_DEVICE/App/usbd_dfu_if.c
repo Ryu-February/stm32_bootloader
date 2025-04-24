@@ -237,20 +237,24 @@ uint8_t *MEM_If_Read_FS(uint8_t *src, uint8_t *dest, uint32_t Len)
   */
 uint16_t MEM_If_GetStatus_FS(uint32_t Add, uint8_t Cmd, uint8_t *buffer)
 {
-  /* USER CODE BEGIN 5 */
-  switch (Cmd)
-  {
-    case DFU_MEDIA_PROGRAM:
+	/* USER CODE BEGIN 5 */
+	switch (Cmd)
+	{
+		case DFU_MEDIA_PROGRAM:
+			buffer[1] = (50 >> 0);//50 == FLASH_PROGRAM_TIME(MACRO)
+			buffer[2] = (50 >> 8);
+			buffer[3] = 0;
+	break;
 
-    break;
-
-    case DFU_MEDIA_ERASE:
-    default:
-
-    break;
-  }
-  return (USBD_OK);
-  /* USER CODE END 5 */
+		case DFU_MEDIA_ERASE:
+		default:
+			buffer[1] = (50 >> 0);
+			buffer[2] = (50 >> 8);
+			buffer[3] = 0;
+	break;
+	}
+	return (USBD_OK);
+	/* USER CODE END 5 */
 }
 
 /* USER CODE BEGIN PRIVATE_FUNCTIONS_IMPLEMENTATION */

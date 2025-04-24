@@ -29,7 +29,6 @@ bool usbInit(void)
 
     GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
     HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-
     MX_USB_DEVICE_Init();//usb_cdc
 
     return ret;

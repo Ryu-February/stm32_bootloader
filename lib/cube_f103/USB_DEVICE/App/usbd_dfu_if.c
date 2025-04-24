@@ -21,7 +21,7 @@
 #include "usbd_dfu_if.h"
 
 /* USER CODE BEGIN INCLUDE */
-
+#include "flash.h"
 /* USER CODE END INCLUDE */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -61,7 +61,7 @@
   * @{
   */
 
-#define FLASH_DESC_STR      "@Internal Flash   /0x08000000/03*016Ka,01*016Kg,01*064Kg,07*128Kg,04*016Kg,01*064Kg,07*128Kg"
+#define FLASH_DESC_STR      "@Internal Flash   /0x08000000/64*01Ka,64*01Kg"
 
 /* USER CODE BEGIN PRIVATE_DEFINES */
 
@@ -174,12 +174,20 @@ uint16_t MEM_If_DeInit_FS(void)
   * @param  Add: Address of sector to be erased.
   * @retval 0 if operation is successful, MAL_FAIL else.
   */
+
+/*
+ * C:\Users\fbcks\STM32Cube\Repository\STM32Cube_FW_F1_V1.8.6\Projects
+ * Reference: STM3210E_EVAL/Applications/USB_Device_DFU_Standalone/Src/usbd_dfu_flash.c*/
 uint16_t MEM_If_Erase_FS(uint32_t Add)
 {
-  /* USER CODE BEGIN 2 */
+	/* USER CODE BEGIN 2 */
 
-  return (USBD_OK);
-  /* USER CODE END 2 */
+	if(flashErase(Add, 1024) != true)
+	{
+		return 1;
+	}
+	return (USBD_OK);
+	/* USER CODE END 2 */
 }
 
 /**
@@ -191,9 +199,13 @@ uint16_t MEM_If_Erase_FS(uint32_t Add)
   */
 uint16_t MEM_If_Write_FS(uint8_t *src, uint8_t *dest, uint32_t Len)
 {
-  /* USER CODE BEGIN 3 */
-  return (USBD_OK);
-  /* USER CODE END 3 */
+	/* USER CODE BEGIN 3 */
+	if(flashWrite((uint32_t)dest, src, Len) != true)
+	{
+		return 1;
+	}
+	return (USBD_OK);
+	/* USER CODE END 3 */
 }
 
 /**
@@ -205,10 +217,15 @@ uint16_t MEM_If_Write_FS(uint8_t *src, uint8_t *dest, uint32_t Len)
   */
 uint8_t *MEM_If_Read_FS(uint8_t *src, uint8_t *dest, uint32_t Len)
 {
-  /* Return a valid address to avoid HardFault */
-  /* USER CODE BEGIN 4 */
-  return (uint8_t*)(USBD_OK);
-  /* USER CODE END 4 */
+	/* Return a valid address to avoid HardFault */
+	/* USER CODE BEGIN 4 */
+
+	for(int i = 0; i < Len; i++)
+	{
+		 dest[i] = src[i];
+	}
+	return (uint8_t*)(dest);
+	/* USER CODE END 4 */
 }
 
 /**
